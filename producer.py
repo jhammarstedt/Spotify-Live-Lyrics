@@ -1,46 +1,54 @@
 
 from kafka import KafkaProducer
-from json import dumps
 from time import sleep
-import requests
+import json
+from json import dumps
 
+import spotipy
+from spotipy.oauth2 import SpotifyOAuth
+
+################################
+#       CONSTANTS              #
+################################
+
+PERIOD = 1
+
+################################
+#       AUTHENTIFICATION       #
+################################
+
+scope = "user-read-playback-state"
+
+# THOSE CAN BE SET AS ENV VARIABLES IN LINUX
 CLIENT_ID = '3be5443f43b14ef587f68864ed10b641'
 CLIENT_SECRET = 'a3e2129ee3b8423e98bce7847c4c3a9a'
+REDIRECT_URI =  'http://localhost/callback'
 
-AUTH_URL = 'https://accounts.spotify.com/api/token'
+sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, redirect_uri=REDIRECT_URI, scope=scope))
 
-# POST
-auth_response = requests.post(AUTH_URL, {
-    'grant_type': 'client_credentials',
-    'client_id': CLIENT_ID,
-    'client_secret': CLIENT_SECRET,
-})
-# convert the response to JSON
-auth_response_data = auth_response.json()
-# save the access token
-access_token = auth_response_data['access_token']
+################################
+#       PRODUCER INIT          #
+################################
 
-headers = {
-    'Authorization': 'Bearer {token}'.format(token=access_token)
-}
-data = {
-    "grant_type": "client_credentials",
-    "scope": "user-read-playback-state",
-}
-response = requests.get('https://api.spotify.com/v1/me/player', headers=headers, data=data)
-data = response.content
-print(data)
-
-exit()
-
-# Producer part
 producer = KafkaProducer(bootstrap_servers=['localhost:9092'], 
     value_serializer=lambda x: dumps(x).encode('utf-8'))
 
+################################
+#       API REQUEST            #
+################################
+
 for e in range(10):
-    response = requests.get('https://api.spotify.com/v1/markets', headers=headers)
-    data = response.json()
-    print(data)
-    producer.send('numtest', data)
+
+    # REQUEST
+    results = sp.current_playback()
+
+    relevant = {
+        'progress_ms': results['progress_ms'],
+        'currently_playing_type': results['currently_playing_type'],
+        'name': results['item']['name'],
+        'id': results['item']['id']
+    }
+
+    producer.send('numtest', relevant)
     producer.flush()
-    sleep(5)
+    sleep(PERIOD)
