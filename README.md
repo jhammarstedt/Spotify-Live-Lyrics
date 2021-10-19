@@ -14,3 +14,22 @@ When done:
 3. Try to make the cool translations on songs using gtranslate or similar
 
     
+
+## setup
+Start zookeeper: 
+
+`$KAFKA_HOME/bin/zookeeper-server-start.sh $KAFKA_HOME/config/zookeeper.properties`
+
+Start kafka server
+`$KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties`
+
+Create our topic
+$KAFKA_HOME/bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1
+--topic lyricgen
+
+Then run the producer
+`python3 producer.py`
+
+and the consumer 
+
+`python3 consumer.py`
