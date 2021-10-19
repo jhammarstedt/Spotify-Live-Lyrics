@@ -33,3 +33,7 @@ Then run the producer
 and the consumer 
 
 `python3 consumer.py`
+
+## Approach
+### Scraping
+Try to get the regular name and artist and make a call to rentadviser
