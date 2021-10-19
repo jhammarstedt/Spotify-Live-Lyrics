@@ -3,6 +3,7 @@ from kafka import KafkaProducer
 from time import sleep
 import json
 from json import dumps
+from decouple import config
 
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
@@ -17,11 +18,11 @@ PERIOD = 1
 #       AUTHENTIFICATION       #
 ################################
 
-scope = "user-read-playback-state"
+scope = "user-read-playback-state user-read-playback-position"
 
 # THOSE CAN BE SET AS ENV VARIABLES IN LINUX
-CLIENT_ID = '3be5443f43b14ef587f68864ed10b641'
-CLIENT_SECRET = 'a3e2129ee3b8423e98bce7847c4c3a9a'
+CLIENT_ID = config('CLIENT_ID',default='')
+CLIENT_SECRET = config('CLIENT_SECRET',default='')
 REDIRECT_URI =  'http://localhost/callback'
 
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, redirect_uri=REDIRECT_URI, scope=scope))
@@ -37,7 +38,7 @@ producer = KafkaProducer(bootstrap_servers=['localhost:9092'],
 #       API REQUEST            #
 ################################
 
-for e in range(10):
+for e in range(10): #here we can set the time
 
     # REQUEST
     results = sp.current_playback()
@@ -49,6 +50,6 @@ for e in range(10):
         'id': results['item']['id']
     }
 
-    producer.send('numtest', relevant)
+    producer.send('lyricgen', relevant)
     producer.flush()
     sleep(PERIOD)
