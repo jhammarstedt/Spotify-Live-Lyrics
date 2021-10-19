@@ -42,11 +42,12 @@ for e in range(10): #here we can set the time
 
     # REQUEST
     results = sp.current_playback()
-
+    print(results)
     relevant = {
         'progress_ms': results['progress_ms'],
         'currently_playing_type': results['currently_playing_type'],
         'name': results['item']['name'],
+        #'artist': results['item'][''],
         'id': results['item']['id']
     }
 
