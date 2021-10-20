@@ -34,7 +34,7 @@ consumer = KafkaConsumer(
     'lyricgen',
     value_deserializer= forgiving_json_deserializer,
     bootstrap_servers=['localhost:9092'],
-    auto_offset_reset='earliest',
+    auto_offset_reset='latest',
     enable_auto_commit=True,
     group_id=None
     )
@@ -46,7 +46,7 @@ for message in consumer:
 
     message = message.value
     #print(message)
-
+    #print(message)
     song = message['name']
     artist = message['artists'][0]
     timestamp = message['progress_ms']
