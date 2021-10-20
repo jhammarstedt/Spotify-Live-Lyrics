@@ -1,4 +1,3 @@
-
 from kafka import KafkaProducer
 from time import sleep
 import json
@@ -38,16 +37,19 @@ producer = KafkaProducer(bootstrap_servers=['localhost:9092'],
 #       API REQUEST            #
 ################################
 
-for e in range(10): #here we can set the time
+for e in range(1000): #here we can set the time
 
     # REQUEST
     results = sp.current_playback()
     print(results)
+    artists = []
+    for a in results['item']['artists']:
+        artists.append(a['name'])
     relevant = {
         'progress_ms': results['progress_ms'],
         'currently_playing_type': results['currently_playing_type'],
         'name': results['item']['name'],
-        #'artist': results['item'][''],
+        'artists': artists,
         'id': results['item']['id']
     }
 

@@ -15,7 +15,7 @@ def parse_song(artist, song):
 def get_song(artist, song):
     #Function to get the lyrics from the results page given artist and song
     results_url = f"https://www.rentanadviser.com/subtitles/getsubtitle.aspx?artist={artist}&song={song}"
-    print(results_url)
+    #print(results_url)
     
     r = requests.get(results_url)
     try:
