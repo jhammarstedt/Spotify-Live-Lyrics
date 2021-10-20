@@ -52,7 +52,6 @@ for e in range(1000): #here we can set the time
         'artists': artists,
         'id': results['item']['id']
     }
-
     producer.send('lyricgen', relevant)
     producer.flush()
     sleep(PERIOD)
