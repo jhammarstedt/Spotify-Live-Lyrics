@@ -1,3 +1,4 @@
+from typing import Tuple
 import requests
 from bs4 import BeautifulSoup
 
@@ -12,7 +13,7 @@ def parse_song(artist, song):
 
     return a_list[0], s
     
-def get_song(artist, song):
+def get_song(artist, song)-> list(Tuple[str, str]):
     #Function to get the lyrics from the results page given artist and song
     results_url = f"https://www.rentanadviser.com/subtitles/getsubtitle.aspx?artist={artist}&song={song}"
     #print(results_url)
@@ -32,9 +33,10 @@ def get_song(artist, song):
         #process it a little
         lyrics = lyrics.split("[")
         lyrics = {s[0]:s[1] for s in [l.split("]") for l in lyrics[1:]]}
+        lyrics = lyrics.items()
         return lyrics
 
-def query_song(artist, song):
+def query_song(artist, song)-> list(Tuple[str, str]):
     #Function to query the website for the results page given artist and song when we cant find it right away
     #! in progress
     search = f"{artist}%20{song}"
@@ -44,14 +46,17 @@ def query_song(artist, song):
 
     lyrics = soup.find(id="tablecontainer")
     print(lyrics)
+
+
     return lyrics
 
 def main():
+    #testing
     artist = ["beyonce"] #example artist
     song = "formation" #example song
     artist, song = parse_song(artist, song)
-    lyrics = get_song(artist, song)
-    print(lyrics)
+    lyrics = query_song(artist, song)
+    #print(lyrics)
 
 
 if __name__ == "__main__":
