@@ -52,7 +52,11 @@ for message in consumer:
     timestamp = message['progress_ms']
 
     if not (artist == previous_artist and song == previous_song):
+        print('New song: ' + song + ' by ' + artist)
         lyrics_list = get_song(artist, song)
+        
+        previous_artist = artist
+        previous_song = song
         # try:
             
         # except AttributeError:
@@ -60,7 +64,9 @@ for message in consumer:
         #     lyrics_list = query_song(artist, song)
         #     pass
         #lyrics_df = lyrics2DataFrame(lyrics_dic, spark)
-
+    if lyrics_list is None:
+            print('No lyrics found')
+            continue
     #line = search_line_df(timestamp, lyrics_df, fitting_offset=fitting_offset)
     line = search_line_dict(timestamp, lyrics_list)
     #print(line) #here we print the actual line for now
