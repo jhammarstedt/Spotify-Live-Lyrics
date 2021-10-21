@@ -13,7 +13,7 @@ def parse_song(artist, song):
 
     return a_list[0], s
     
-def get_song(artist, song)-> list(Tuple[str, str]):
+def get_song(artist, song)-> list():
     #Function to get the lyrics from the results page given artist and song
     results_url = f"https://www.rentanadviser.com/subtitles/getsubtitle.aspx?artist={artist}&song={song}"
     #print(results_url)
@@ -36,7 +36,7 @@ def get_song(artist, song)-> list(Tuple[str, str]):
         lyrics = lyrics.items()
         return lyrics
 
-def query_song(artist, song)-> list(Tuple[str, str]):
+def query_song(artist, song)-> list():
     #Function to query the website for the results page given artist and song when we cant find it right away
     #! in progress
     search = f"{artist}%20{song}"
@@ -46,7 +46,8 @@ def query_song(artist, song)-> list(Tuple[str, str]):
 
     lyrics = soup.find(id="tablecontainer")
     print(lyrics)
-
+    
+    # //*[@id="tablecontainer"]/table/tbody/tr[1]/td/a
 
     return lyrics
 
