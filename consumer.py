@@ -1,15 +1,16 @@
 from kafka import KafkaConsumer
-from pyspark.sql import *
+#from pyspark.sql import *
 from json import loads
 import json
 from logging import log
 from scraper import get_song, query_song
 from utils import *
-from pyspark.sql import SparkSession
-from pyspark.sql.types import *
+#from pyspark.sql import SparkSession
+#from pyspark.sql.types import *
 import time
+import asyncio
 
-spark = SparkSession.builder.appName("lyric_gen").getOrCreate()
+#spark = SparkSession.builder.appName("lyric_gen").getOrCreate()
 
 def forgiving_json_deserializer(v):
     # Now we can access it as json instead!
@@ -23,8 +24,8 @@ consumer = KafkaConsumer(
     'lyricgen',
     value_deserializer= forgiving_json_deserializer,
     bootstrap_servers=['localhost:9092'],
-    auto_offset_reset='latest',
-    enable_auto_commit=True,
+    auto_offset_reset='latest', #Ska denna va latest?
+    enable_auto_commit=False, # Stämmer detta?
     group_id=None
     )
 
@@ -32,7 +33,7 @@ previous_line = ''
 previous_artist = ''
 previous_song = ''
 for message in consumer:
-    start_time = time.time()
+    #start_time = time.time()
     '''
     with open('config.json', 'r') as f:
         config  = json.load(f)
@@ -51,20 +52,24 @@ for message in consumer:
     timestamp = message['progress_ms']
 
     if not (artist == previous_artist and song == previous_song):
-        try:
-            lyrics_list = get_song(artist, song)
-        except AttributeError:
-            lyrics_list = query_song(artist, song)
-            pass
+        lyrics_list = get_song(artist, song)
+        # try:
+            
+        # except AttributeError:
+        #     print('in here')
+        #     lyrics_list = query_song(artist, song)
+        #     pass
         #lyrics_df = lyrics2DataFrame(lyrics_dic, spark)
 
     #line = search_line_df(timestamp, lyrics_df, fitting_offset=fitting_offset)
     line = search_line_dict(timestamp, lyrics_list)
+    #print(line) #here we print the actual line for now
+    
     if not line == previous_line:
         print(line)
         previous_line = line
 
-    end_time = time.time()
+    #end_time = time.time()
 
     #print(end_time - start_time)
 

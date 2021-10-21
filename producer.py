@@ -7,6 +7,7 @@ from decouple import config
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 
+
 ################################
 #       CONSTANTS              #
 ################################
