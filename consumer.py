@@ -1,26 +1,15 @@
 from kafka import KafkaConsumer
+from pyspark.sql import *
 from json import loads
 import json
 from logging import log
 from scraper import get_song
+from utils import *
+from pyspark.sql import SparkSession
+from pyspark.sql.types import *
+import time
 
-def time2ms(time):
-    
-    time = time.split(':')
-    minutes = float(time[0])
-    seconds = float(time[1])
-
-    ms = (minutes * 60 + seconds) * 1000
-
-    return ms
-
-def search_line(timestamp, lyrics_dic):
-
-    keys = list(lyrics_dic.keys())
-
-    current_time = list(filter(lambda time: time2ms(time) > timestamp, keys))[0]
-
-    return lyrics_dic[current_time]    
+spark = SparkSession.builder.appName("lyric_gen").getOrCreate()
 
 def forgiving_json_deserializer(v):
     # Now we can access it as json instead!
@@ -43,22 +32,36 @@ previous_line = ''
 previous_artist = ''
 previous_song = ''
 for message in consumer:
+    start_time = time.time()
+    '''
+    with open('config.json', 'r') as f:
+        config  = json.load(f)
+    f.close()
+    fitting_offset = config['offset']
+    '''
 
     message = message.value
-    #print(message)
-    #print(message)
+
+    if message['status'] == 'NOT PLAYING':
+        print('No song being played')
+        continue
+
     song = message['name']
     artist = message['artists'][0]
     timestamp = message['progress_ms']
 
-    #print(song, artist, timestamp)
-
     if not (artist == previous_artist and song == previous_song):
         lyrics_dic = get_song(artist, song)
+        #lyrics_df = lyrics2DataFrame(lyrics_dic, spark)
 
-    line = search_line(timestamp, lyrics_dic)
+    #line = search_line_df(timestamp, lyrics_df, fitting_offset=fitting_offset)
+    line = search_line_dict(timestamp, lyrics_dic)
     if not line == previous_line:
         print(line)
         previous_line = line
+
+    end_time = time.time()
+
+    print(end_time - start_time)
 
     #add artist
