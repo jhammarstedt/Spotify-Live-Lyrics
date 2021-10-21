@@ -42,16 +42,23 @@ for e in range(1000): #here we can set the time
     # REQUEST
     results = sp.current_playback()
     print(results)
-    artists = []
-    for a in results['item']['artists']:
-        artists.append(a['name'])
-    relevant = {
-        'progress_ms': results['progress_ms'],
-        'currently_playing_type': results['currently_playing_type'],
-        'name': results['item']['name'],
-        'artists': artists,
-        'id': results['item']['id']
-    }
-    producer.send('lyricgen', relevant)
+    try:
+        artists = []
+        for a in results['item']['artists']:
+            artists.append(a['name'])
+        data = {
+            'status': 'OK',
+            'progress_ms': results['progress_ms'],
+            'currently_playing_type': results['currently_playing_type'],
+            'name': results['item']['name'],
+            'artists': artists,
+            'id': results['item']['id'],
+            'is_playing': results['is_playing']
+        }
+    except TypeError:
+        data = {
+            'status': 'NOT PLAYING'
+        }
+    producer.send('lyricgen', data)
     producer.flush()
     sleep(PERIOD)
