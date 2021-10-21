@@ -38,3 +38,6 @@ and the consumer
 ## Approach
 ### Scraping
 Try to get the regular name and artist and make a call to rentadviser
+
+### UI
+https://codepen.io/rachsmith/pen/oGEMbz
