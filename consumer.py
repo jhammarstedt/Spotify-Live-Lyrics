@@ -3,7 +3,7 @@ from pyspark.sql import *
 from json import loads
 import json
 from logging import log
-from scraper import get_song
+from scraper import get_song, query_song
 from utils import *
 from pyspark.sql import SparkSession
 from pyspark.sql.types import *
@@ -51,17 +51,21 @@ for message in consumer:
     timestamp = message['progress_ms']
 
     if not (artist == previous_artist and song == previous_song):
-        lyrics_dic = get_song(artist, song)
+        try:
+            lyrics_list = get_song(artist, song)
+        except AttributeError:
+            lyrics_list = query_song(artist, song)
+            pass
         #lyrics_df = lyrics2DataFrame(lyrics_dic, spark)
 
     #line = search_line_df(timestamp, lyrics_df, fitting_offset=fitting_offset)
-    line = search_line_dict(timestamp, lyrics_dic)
+    line = search_line_dict(timestamp, lyrics_list)
     if not line == previous_line:
         print(line)
         previous_line = line
 
     end_time = time.time()
 
-    print(end_time - start_time)
+    #print(end_time - start_time)
 
     #add artist
