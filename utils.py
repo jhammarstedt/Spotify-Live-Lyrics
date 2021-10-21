@@ -11,7 +11,11 @@ def time2ms(time):
 
 
 
-def search_line_dict(timestamp, lyrics_dic, fitting_offset=0, anticipation=1):
+def search_line_dict(timestamp, lyrics_list, fitting_offset=0, anticipation=1):
+
+    lyrics_dic = {}
+    for k,v in lyrics_list:
+        lyrics_dic[k] = v
 
     keys = list(lyrics_dic.keys())
 
