@@ -29,7 +29,7 @@ def search_line_dict(timestamp, lyrics_list, fitting_offset=0, anticipation=1):
         return ''
 
     current_time = filtered_time[0]
-
+    #print("TIME",current_time)
     return lyrics_dic[current_time]    
 
 
