@@ -12,7 +12,7 @@ from spotipy.oauth2 import SpotifyOAuth
 #       CONSTANTS              #
 ################################
 
-PERIOD = 1
+PERIOD = 0.3
 
 ################################
 #       AUTHENTIFICATION       #

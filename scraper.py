@@ -2,7 +2,7 @@ from typing import Tuple
 import requests
 from bs4 import BeautifulSoup
 import asyncio
-
+import time
 
 def parse_song(artist, song):
     a_list = []
@@ -20,17 +20,21 @@ def parse_lyrics(soup_object):
     
     #process it a little
     lyrics = lyrics.split("[") #clean up the lyrics from format [time] lyrics [time] lyrics
+    title = lyrics[0].split("]")[0] #get the title of the song
+    print(f"Now playing: {title.replace('(.LRC)','').upper()}")
     lyrics = {s[0]:s[1] for s in [l.split("]") for l in lyrics[1:]]}
     lyrics = lyrics.items() #return it as a touple [(timestamp, lyric)]
     return lyrics
 
 def get_song(artist, song)-> list():
     """Function to get the lyrics from the results page given artist and song"""
+    #return query_song(artist, song) #request worked but we song not found
+    
     results_url = f"https://www.rentanadviser.com/subtitles/getsubtitle.aspx?artist={artist}&song={song}"
     
     r = requests.get(results_url)
     soup = BeautifulSoup(r.text, "html.parser")
-    #! just need to catch when this dont work
+    
     if r.status_code == 404:
         return None #request failed
     elif "error" in soup.b.text.lower(): 
@@ -45,6 +49,9 @@ def query_song(artist, song):
     """
     Function to query the website for the results page given 
     artist and song when we cant find it right away
+    
+    #! still a bug where it dont find all songs
+    
     """
     search = f"{artist}%20{song}"
     query_url = f"https://www.rentanadviser.com/subtitles/subtitles4songs.aspx?q={search}"
@@ -58,24 +65,37 @@ def query_song(artist, song):
         cols=row.find_all('td')
         cols=[x for x in cols]
         link = cols[0].a['href']
+        title = cols[0].a.find(text=True).lower()
         link = f"https://www.rentanadviser.com/subtitles/{link}"
-        if "official" in link.lower(): #only want the official version 
-            return parse_lyrics(BeautifulSoup(requests.get(link).text, "html.parser"))
+        s = song.replace("%20"," ").lower() #remove the %20 from the song to match the title
+        a = artist.replace("%20"," ").lower() #remove the %20 from the artist to match the title
+        print(f"comparing {s} {a} with {title}")
+        if (a in title) and (s in title): #if the artist and song are in the title
+            if ("official" in link.lower()): #only want the official version 
+                #print("OFFICIAL WAS FOUND") #print it
+                return parse_lyrics(BeautifulSoup(requests.get(link).text, "html.parser"))
+            else:
+                output.append(link) #if we dont find an official we just append it
         else:
-            output.append(link) #if we dont find an official we just append it
-    
+            continue
     # if we didnt find any  official we just return the first link through parse_lyrics
-
-    return parse_lyrics(BeautifulSoup(requests.get(link).text, "html.parser"))
+    if len(output) == 0:
+        print("SONG NOT FOUND IN QUERY") #
+        return None 
+    else:
+        print("OFFICIAL not found,", output[0])
+        
+        return parse_lyrics(BeautifulSoup(requests.get(output[0]).text, "html.parser")) 
 
 def main():
+    start = time.time()
     #testing, we run the function through the consumer instead
-    artist = ["ed sheeran"] #example artist
-    song = "shape of you" #example song
+    artist = ["busta rhymes"] #example artist
+    song = "look over your shoulder" #example song
     artist, song = parse_song(artist, song)
     lyrics = get_song(artist, song)
-    print(lyrics)
-
+    #print(lyrics)
+    print(f"Time taken: {time.time() - start}")
 
 if __name__ == "__main__":
     main()
