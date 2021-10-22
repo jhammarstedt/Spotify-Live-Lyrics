@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lyrics generator
+    </title>
+    <style>
+        /* We’ll set some colors and center everything. */
+
+        body {
+            background: #1DB954;
+            color: #191414;
+            height: 100vh;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        /* We set the position to relative so that we can stack a blurred pseudo element on top of the original text */
+        
+        span {
+            position: relative;
+            font-family: "Avenir Next", sans-serif;
+            font-weight: 900;
+            font-size: 64px;
+            text-transform: uppercase;
+            font-style: italic;
+            letter-spacing: 0.05em;
+            display: inline-block;
+        }
+        
+        /* We create a pseudo element and blur it using the SVG filter. We’ll grab the content from the custom HTML attribute. */
+        
+        span:before {
+            position: absolute;
+            left: 0;
+            top: 0;
+            content: attr(filter-content);
+        
+            filter: url(#motion-blur-filter);
+        }
+        
+        /* We hide the SVG filter element from the DOM as it would take up some space */
+        
+        svg {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <svg xmlns="http://www.w3.org/2000/svg">
+  
+        <!-- filterUnits is required to prevent clipping the blur outside the viewBox -->
+        
+          <filter id="motion-blur-filter" filterUnits="userSpaceOnUse">
+            
+            <!-- We only want horizontal blurring. x: 100, y: 0 -->
+            
+              <feGaussianBlur stdDeviation="100 0"></feGaussianBlur>
+          </filter>
+      </svg>
+      
+      <!-- We use a custom attribute to set the text that the pseudo element should display and blur. In this case, we use the first character of the word. -->
+      
+      <span filter-content="S" id="lyrics"></span>
+    
+      <script>
+        var eventSource = new EventSource("/listen")
+        
+        eventSource.addEventListener("message", function(e) {
+          console.log(e.data)
+        }, false)
+    
+        eventSource.addEventListener("online", function(e) {
+          // console.log(e.data.color)
+          data = JSON.parse(e.data)
+          document.querySelector("#lyrics").innerText = data.lyrics
+        }, true)
+    
+        </script>
+</body>
+</html>
+
+    

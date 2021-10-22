@@ -53,6 +53,8 @@ for message in consumer:
 
     if not (artist == previous_artist and song == previous_song):
         print('New song: ' + song + ' by ' + artist)
+        with open('lyrics.txt','w') as myfile:
+            myfile.write('New song: ' + song + ' by ' + artist)
         lyrics_list = get_song(artist, song)
         
         previous_artist = artist
@@ -66,6 +68,8 @@ for message in consumer:
         #lyrics_df = lyrics2DataFrame(lyrics_dic, spark)
     if lyrics_list is None:
             print('No lyrics found')
+            with open('lyrics.txt','w') as myfile:
+                myfile.write('No lyrics found')
             continue
     #line = search_line_df(timestamp, lyrics_df, fitting_offset=fitting_offset)
     line = search_line_dict(timestamp, lyrics_list)
@@ -74,11 +78,8 @@ for message in consumer:
     if not line == previous_line:
         print(line)
         if line is not "":
-            with open('lyrics.txt','r+') as myfile:
-                data = myfile.read()
-                myfile.seek(0)
+            with open('lyrics.txt','w') as myfile:
                 myfile.write(line)
-                myfile.truncate()
 
         previous_line = line
 
