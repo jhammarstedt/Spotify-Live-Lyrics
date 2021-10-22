@@ -1,3 +1,4 @@
+import json
 
 def time2ms(time):
     
@@ -9,7 +10,27 @@ def time2ms(time):
 
     return ms
 
+def write_to_file(found:bool=True,**kwargs): #)title:str="Empty",lyrics:str="Empty",id:str="Empty",):
+    info = {}
+    with open('lyrics.json', 'r') as f:
+        info = json.load(f)
 
+
+    if "title" in kwargs:
+        info["data"]["title"] =  kwargs["title"]
+        info["data"]["lyrics"] =  "Loading..."
+
+    else:
+        if not found:
+            info["data"]["lyrics"] = "Not Found"
+        else:
+            info["data"]["lyrics"] = kwargs["lyrics"]
+
+        info["data"]["id"] = kwargs["id"]
+
+    with open('lyrics.json',"w") as myfile:  
+        json.dump(info, myfile)
+   
 
 def search_line_dict(timestamp, lyrics_list, fitting_offset=0, anticipation=1):
 

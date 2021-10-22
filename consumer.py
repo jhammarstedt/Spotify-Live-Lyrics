@@ -9,6 +9,7 @@ from utils import *
 #from pyspark.sql.types import *
 import time
 import asyncio
+from utils import write_to_file
 
 #spark = SparkSession.builder.appName("lyric_gen").getOrCreate()
 
@@ -19,6 +20,7 @@ def forgiving_json_deserializer(v):
     except json.decoder.JSONDecodeError:
         log.exception('Unable to decode: %s', v)
         return None
+
 
 consumer = KafkaConsumer(
     'lyricgen',
@@ -50,9 +52,12 @@ for message in consumer:
     song = message['name']
     artist = message['artists'][0]
     timestamp = message['progress_ms']
+    song_id = message['id']
 
     if not (artist == previous_artist and song == previous_song):
         print('New song: ' + song + ' by ' + artist)
+        #with open('lyrics.txt','w') as myfile:
+        #    myfile.write('New song: ' + song + ' by ' + artist)
         lyrics_list = get_song(artist, song)
         
         previous_artist = artist
@@ -66,17 +71,17 @@ for message in consumer:
         #lyrics_df = lyrics2DataFrame(lyrics_dic, spark)
     if lyrics_list is None:
             print('No lyrics found')
+            write_to_file(lyrics=song,id=song_id, found = False)
             continue
     #line = search_line_df(timestamp, lyrics_df, fitting_offset=fitting_offset)
     line = search_line_dict(timestamp, lyrics_list)
     #print(line) #here we print the actual line for now
     
-    if not line == previous_line:
+    if not line == previous_line: #if the line is the same as the previous line, we don't want to print it
         print(line)
-        previous_line = line
+        if line is not "":
+            write_to_file(lyrics=line,id=song_id, found = True)
+            # with open('lyrics.txt','w') as myfile:
+            #     myfile.write(line)
 
-    #end_time = time.time()
-
-    #print(end_time - start_time)
-
-    #add artist
+        previous_line = line #update previous line
