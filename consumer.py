@@ -20,6 +20,20 @@ def forgiving_json_deserializer(v):
         log.exception('Unable to decode: %s', v)
         return None
 
+def write_to_file(found:bool,lyrics:str="Empty",id:str="Empty",):
+    with open('lyrics.txt','r+') as myfile:
+        lines = myfile.readlines()
+        if not found:
+            lines[1] = 'No lyrics found'
+        else:
+            lines[1] = lyrics
+        
+        lines[2] = id
+
+        myfile.writelines(lines)
+        myfile.close()
+
+
 consumer = KafkaConsumer(
     'lyricgen',
     value_deserializer= forgiving_json_deserializer,
@@ -50,11 +64,12 @@ for message in consumer:
     song = message['name']
     artist = message['artists'][0]
     timestamp = message['progress_ms']
+    song_id = message['id']
 
     if not (artist == previous_artist and song == previous_song):
         print('New song: ' + song + ' by ' + artist)
-        with open('lyrics.txt','w') as myfile:
-            myfile.write('New song: ' + song + ' by ' + artist)
+        #with open('lyrics.txt','w') as myfile:
+        #    myfile.write('New song: ' + song + ' by ' + artist)
         lyrics_list = get_song(artist, song)
         
         previous_artist = artist
@@ -68,23 +83,17 @@ for message in consumer:
         #lyrics_df = lyrics2DataFrame(lyrics_dic, spark)
     if lyrics_list is None:
             print('No lyrics found')
-            with open('lyrics.txt','w') as myfile:
-                myfile.write('No lyrics found')
+            write_to_file(lyrics=song,id=song_id, found = False)
             continue
     #line = search_line_df(timestamp, lyrics_df, fitting_offset=fitting_offset)
     line = search_line_dict(timestamp, lyrics_list)
     #print(line) #here we print the actual line for now
     
-    if not line == previous_line:
+    if not line == previous_line: #if the line is the same as the previous line, we don't want to print it
         print(line)
         if line is not "":
-            with open('lyrics.txt','w') as myfile:
-                myfile.write(line)
+            write_to_file(lyrics=line,id=song_id, found = True)
+            # with open('lyrics.txt','w') as myfile:
+            #     myfile.write(line)
 
-        previous_line = line
-
-    #end_time = time.time()
-
-    #print(end_time - start_time)
-
-    #add artist
+        previous_line = line #update previous line
