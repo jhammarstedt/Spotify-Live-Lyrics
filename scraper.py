@@ -4,6 +4,8 @@ from bs4 import BeautifulSoup
 import asyncio
 import time
 
+from utils import write_to_file
+
 def parse_song(artist, song):
     a_list = []
     for i in artist:
@@ -21,10 +23,14 @@ def parse_lyrics(soup_object):
     #process it a little
     lyrics = lyrics.split("[") #clean up the lyrics from format [time] lyrics [time] lyrics
     title = lyrics[0].split("]")[0] #get the title of the song
-    with open("lyrics.txt", "w") as f: #writing the title to the file
-        lines = [title,"\n","_","\n","ID"]
-        f.writelines(lines) # 
-        f.close()
+    
+    write_to_file(title=title) #write title
+    
+    # with open("lyrics.txt", "r+") as f: #writing the title to the file
+    #     lines = f.readlines()
+    #     lines = [title,"_\n","ID"]
+    #     f.writelines(lines) # 
+    #     f.close()
 
     print(f"Now playing: {title.replace('(.LRC)','').upper()}")
     lyrics = {s[0]:s[1] for s in [l.split("]") for l in lyrics[1:]]}

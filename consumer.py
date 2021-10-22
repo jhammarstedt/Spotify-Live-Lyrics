@@ -9,6 +9,7 @@ from utils import *
 #from pyspark.sql.types import *
 import time
 import asyncio
+from utils import write_to_file
 
 #spark = SparkSession.builder.appName("lyric_gen").getOrCreate()
 
@@ -19,19 +20,6 @@ def forgiving_json_deserializer(v):
     except json.decoder.JSONDecodeError:
         log.exception('Unable to decode: %s', v)
         return None
-
-def write_to_file(found:bool,lyrics:str="Empty",id:str="Empty",):
-    with open('lyrics.txt','r+') as myfile:
-        lines = myfile.readlines()
-        if not found:
-            lines[1] = 'No lyrics found'
-        else:
-            lines[1] = lyrics
-        
-        lines[2] = id
-
-        myfile.writelines(lines)
-        myfile.close()
 
 
 consumer = KafkaConsumer(
