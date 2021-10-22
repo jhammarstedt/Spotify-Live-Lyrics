@@ -10,23 +10,28 @@ def time2ms(time):
 
     return ms
 
-def write_to_file(found:bool=True,**kwargs): #)title:str="Empty",lyrics:str="Empty",id:str="Empty",):
+def write_to_file(found:bool=True,reset=False,**kwargs): #)title:str="Empty",lyrics:str="Empty",id:str="Empty",):
     info = {}
     with open('lyrics.json', 'r') as f:
         info = json.load(f)
 
 
-    if "title" in kwargs:
-        info["data"]["title"] =  kwargs["title"]
-        info["data"]["lyrics"] =  "Loading..."
-
+    if reset: #at the start we want to reset the file
+        info["data"]["title"] =  "By Johan Hammarstedt & Javier Garcia San Vicente "
+        info["data"]["lyrics"] =  "The Spotify Kareoke Special \n\n Play a song to start!"
+        info["data"]["id"] =  "Empty"
     else:
-        if not found:
-            info["data"]["lyrics"] = "Not Found"
-        else:
-            info["data"]["lyrics"] = kwargs["lyrics"]
+        if "title" in kwargs:
+            info["data"]["title"] =  kwargs["title"]
+            info["data"]["lyrics"] =  "Loading..."
 
-        info["data"]["id"] = kwargs["id"]
+        else:
+            if not found:
+                info["data"]["lyrics"] = "Not Found"
+            else:
+                info["data"]["lyrics"] = kwargs["lyrics"]
+
+            info["data"]["id"] = kwargs["id"]
 
     with open('lyrics.json',"w") as myfile:  
         json.dump(info, myfile)
