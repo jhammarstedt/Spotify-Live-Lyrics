@@ -4,6 +4,7 @@ from gevent.pywsgi import WSGIServer
 import json
 import time
 
+
 app = Flask(__name__)
 counter = 100
 
@@ -23,11 +24,16 @@ def listen():
       #  color = f.read()
       #  print("******************")
       #if(color != "white"):
-      with open("lyrics.txt") as f:
-        lyrics = f.read()
-        print(lyrics)
+      with open("lyrics.json","r") as f:
+        song_info = json.load(f)["data"]
+        print(song_info)
 
-        _data = json.dumps({"lyrics":lyrics})
+        _data = json.dumps(
+          {"title":song_info["title"],
+          "lyrics":song_info["lyrics"],
+          "id":f"https://open.spotify.com/embed/track/{song_info['id']}"
+          })
+      
         yield f"id: 1\ndata: {_data}\nevent: online\n\n"
       time.sleep(0.5)
   return Response(respond_to_client(), mimetype='text/event-stream')
