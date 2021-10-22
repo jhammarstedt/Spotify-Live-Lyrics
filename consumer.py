@@ -73,6 +73,12 @@ for message in consumer:
     
     if not line == previous_line:
         print(line)
+        with open('lyrics.txt','r+') as myfile:
+            data = myfile.read()
+            myfile.seek(0)
+            myfile.write(line)
+            myfile.truncate()
+
         previous_line = line
 
     #end_time = time.time()
