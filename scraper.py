@@ -29,18 +29,23 @@ def parse_lyrics(soup_object):
 def get_song(artist, song)-> list():
     """Function to get the lyrics from the results page given artist and song"""
     #return query_song(artist, song) #request worked but we song not found
-    
-    results_url = f"https://www.rentanadviser.com/subtitles/getsubtitle.aspx?artist={artist}&song={song}"
-    
-    r = requests.get(results_url)
-    soup = BeautifulSoup(r.text, "html.parser")
-    
-    if r.status_code == 404:
-        return None #request failed
-    elif "error" in soup.b.text.lower(): 
-        return query_song(artist, song) #request worked but we song not found
+    query_only = True
+    if query_only:
+        return query_song(artist, song)
     else:
-        return parse_lyrics(soup) #song found
+        results_url = f"https://www.rentanadviser.com/subtitles/getsubtitle.aspx?artist={artist}&song={song}"
+        
+        r = requests.get(results_url)
+        soup = BeautifulSoup(r.text, "html.parser")
+        
+        
+
+        if r.status_code == 404:
+            return None #request failed
+        elif "error" in soup.b.text.lower(): 
+            return query_song(artist, song) #request worked but we song not found
+        else:
+            return parse_lyrics(soup) #song found
     
 
         
