@@ -21,6 +21,7 @@ def forgiving_json_deserializer(v):
         log.exception('Unable to decode: %s', v)
         return None
 
+write_to_file(reset=True)
 
 consumer = KafkaConsumer(
     'lyricgen',

@@ -23,16 +23,11 @@ def parse_lyrics(soup_object):
     #process it a little
     lyrics = lyrics.split("[") #clean up the lyrics from format [time] lyrics [time] lyrics
     title = lyrics[0].split("]")[0] #get the title of the song
-    
+    title = title.replace("(.LRC)","")
     write_to_file(title=title) #write title
     
-    # with open("lyrics.txt", "r+") as f: #writing the title to the file
-    #     lines = f.readlines()
-    #     lines = [title,"_\n","ID"]
-    #     f.writelines(lines) # 
-    #     f.close()
 
-    print(f"Now playing: {title.replace('(.LRC)','').upper()}")
+    print(f"Now playing: {title.upper()}")
     lyrics = {s[0]:s[1] for s in [l.split("]") for l in lyrics[1:]]}
     lyrics = lyrics.items() #return it as a touple [(timestamp, lyric)]
     return lyrics
@@ -86,8 +81,19 @@ def query_song(artist, song):
         s = song.replace("%20"," ").lower() #remove the %20 from the song to match the title
         a = artist.replace("%20"," ").lower() #remove the %20 from the artist to match the title
         print(f"comparing {s} {a} with {title}")
+        """ 
+        We need to fix this to get better queires, This does not work now:
+        comparing industry baby (feat. jack harlow) lil nas x with  lil nas x - industry baby (lyrics) ft. jack harlow
+
+        it misses cus the the spotify title is not matching the song name exactly
+        
+         """
+        
         if (a in title) and (s in title): #if the artist and song are in the title
-            if ("official" in link.lower()): #only want the official version 
+            if ("audio" in title.lower()): #only want the official version 
+                #print("OFFICIAL WAS FOUND") #print it
+                return parse_lyrics(BeautifulSoup(requests.get(link).text, "html.parser"))
+            if ("official" in title.lower()): #only want the official version 
                 #print("OFFICIAL WAS FOUND") #print it
                 return parse_lyrics(BeautifulSoup(requests.get(link).text, "html.parser"))
             else:
