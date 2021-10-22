@@ -21,6 +21,11 @@ def parse_lyrics(soup_object):
     #process it a little
     lyrics = lyrics.split("[") #clean up the lyrics from format [time] lyrics [time] lyrics
     title = lyrics[0].split("]")[0] #get the title of the song
+    with open("lyrics.txt", "w") as f: #writing the title to the file
+        lines = [title,"\n","_","\n","ID"]
+        f.writelines(lines) # 
+        f.close()
+
     print(f"Now playing: {title.replace('(.LRC)','').upper()}")
     lyrics = {s[0]:s[1] for s in [l.split("]") for l in lyrics[1:]]}
     lyrics = lyrics.items() #return it as a touple [(timestamp, lyric)]
