@@ -4,15 +4,25 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lyrics generator
-    </title>
+    <title>Lyrics generator</title>
     <style>
         /* We’ll set some colors and center everything. */
 
-        body {
+        #title {
             background: #1DB954;
             color: #191414;
-            height: 100vh;
+            height: 20vh;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 32px;
+        }
+
+        #lyrics {
+            background: #1DB954;
+            color: #191414;
+            height: 80vh;
             text-align: center;
             display: flex;
             justify-content: center;
@@ -64,6 +74,7 @@
       </svg>
       
       <!-- We use a custom attribute to set the text that the pseudo element should display and blur. In this case, we use the first character of the word. -->
+
       <span filter-content="S" id="title"></span>
 
       <span filter-content="S" id="lyrics"></span>
@@ -79,6 +90,8 @@
           // console.log(e.data.color)
           data = JSON.parse(e.data)
           document.querySelector("#lyrics").innerText = data.lyrics
+          document.querySelector("#title").innerText = data.title
+
         }, true)
     
         </script>
