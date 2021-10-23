@@ -82,6 +82,8 @@ Then use the keyboard to control the offset:
 ## Disclaimer
 This project is not done in association with Spotify and was made for private use in a school project. Note that not all lyrics will work, as our logic for getting the lyrics is not perfect, some songs are not found. Occasionally the timestamps are not matching with the lyrics due to the wrong version.
 
+Right now the project runs on localhost as the app is not official, so you have to set everything up yourself.
+
 ## Credits
 * Lyrics from [Rentadviser](https://www.rentanadviser.com/subtitles/subtitles4songs.aspx)
 
