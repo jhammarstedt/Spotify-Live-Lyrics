@@ -1,11 +1,9 @@
 <img src=https://www.freepnglogos.com/uploads/spotify-logo-png/spotify-download-logo-30.png align="right" width="100"> 
 
-# Spotioke 
+# Spotify Lyric Generator 
 As Spotify only enables live lyrics in the U.S many of us Europeans missed out on a lot of fun karaoke sessions...
 
-Fear not, Spotioke is the real-time Spotify Lyric Generator you need!
-
-Connect with your Spotify Account and enjoy real-time lyrics!
+Fear not, run our code, connect with your Spotify Account and enjoy real-time lyrics!
 
 ## Authors
 * Johan Hammarstedt  [<img src =https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png width ="20">](https://github.com/jhammarstedt) 
