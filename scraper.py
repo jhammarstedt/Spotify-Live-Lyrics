@@ -3,7 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 import asyncio
 import time
-
+import re
 from utils import write_to_file
 
 def parse_song(artist, song):
@@ -80,24 +80,29 @@ def query_song(artist, song):
         link = f"https://www.rentanadviser.com/subtitles/{link}"
         s = song.replace("%20"," ").lower() #remove the %20 from the song to match the title
         a = artist.replace("%20"," ").lower() #remove the %20 from the artist to match the title
-        print(f"comparing {s} {a} with {title}")
+        
         """ 
         We need to fix this to get better queires, This does not work now:
         comparing industry baby (feat. jack harlow) lil nas x with  lil nas x - industry baby (lyrics) ft. jack harlow
 
         it misses cus the the spotify title is not matching the song name exactly
         
-         """
+        """
         
-        if (a in title) and (s in title): #if the artist and song are in the title
-            if ("audio" in title.lower()): #only want the official version 
-                #print("OFFICIAL WAS FOUND") #print it
-                return parse_lyrics(BeautifulSoup(requests.get(link).text, "html.parser"))
-            if ("official" in title.lower()): #only want the official version 
-                #print("OFFICIAL WAS FOUND") #print it
-                return parse_lyrics(BeautifulSoup(requests.get(link).text, "html.parser"))
-            else:
-                output.append(link) #if we dont find an official we just append it
+        if (a in title): #if the artist are in the title
+            find = "\s+(\(?fe?a?t.*\)?)" #regex to drop all the ft feat etc
+            title_clean = re.sub(find, "", title) #remove the ft feat etc
+            s_clean = re.sub(find, "", s) #remove the ft feat etc
+            #print(f"SONG CLEANED {s_clean} VS {title_clean}\noriginal song: {song}\nARTIST: {a}\n LINK:{link}")
+            if (s_clean in title_clean or s in link): #if the song is in the title or the link description (trying to avoid the above mentioned error)
+                if ("audio" in title): #only want the official version 
+                    #print("OFFICIAL WAS FOUND")
+                    return parse_lyrics(BeautifulSoup(requests.get(link).text, "html.parser"))
+                elif ("official" in title): #only want the official version 
+                    
+                    return parse_lyrics(BeautifulSoup(requests.get(link).text, "html.parser"))
+                else:
+                    output.append(link) #if we dont find an official we just append it
         else:
             continue
     # if we didnt find any  official we just return the first link through parse_lyrics

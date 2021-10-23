@@ -12,6 +12,9 @@ import asyncio
 from utils import write_to_file
 
 #spark = SparkSession.builder.appName("lyric_gen").getOrCreate()
+with open('config.json', 'w') as f:
+    json.dump({"offset":0.0}, f) #reseting the offset 
+
 
 def forgiving_json_deserializer(v):
     # Now we can access it as json instead!
@@ -37,12 +40,12 @@ previous_artist = ''
 previous_song = ''
 for message in consumer:
     #start_time = time.time()
-    '''
+    
     with open('config.json', 'r') as f:
         config  = json.load(f)
     f.close()
     fitting_offset = config['offset']
-    '''
+    
 
     message = message.value
 
@@ -75,7 +78,7 @@ for message in consumer:
             write_to_file(lyrics=song,id=song_id, found = False)
             continue
     #line = search_line_df(timestamp, lyrics_df, fitting_offset=fitting_offset)
-    line = search_line_dict(timestamp, lyrics_list)
+    line = search_line_dict(timestamp, lyrics_list,fitting_offset=fitting_offset)
     #print(line) #here we print the actual line for now
     
     if not line == previous_line: #if the line is the same as the previous line, we don't want to print it
