@@ -8,17 +8,25 @@ As Spotify only enables live lyrics in the U.S many of us Europeans missed out o
 * Javier García San Vicente  [<img src =https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png width ="20">](https://github.com/https://github.com/Javigsv) 
 
 ## Setup
-Since our app is still in developer mode, you'll need to create your own app to run it. 
+First fork this repository: `$git clone https://github.com/jhammarstedt/Spotify-lyric-Generator.git`
 
-
-If you already have kafka and zookeeper installed you can skip the first 6 steps, just create the topic lyricgen. If not follow the steps below:
-
-
-Download and install kafka and zookeeper:
-### Installing Kafka
-
+### Spotify Developer Account
+Since our app is still in developer mode, you'll need to have a premiun account and create your own app to run it, but fortunately this is very easy:
+1. Go [here](https://developer.spotify.com/dashboard/)
+2. Login, accept the conditions to spotify developers
+3. Create an app
+4. Get your credentials (Client ID and Client Secret)
+5. In the project repo, create a .env file with the following and save:
+  ```
+  CLIENT_ID = PASTE YOUR ID 
+  CLIENT_SECRET = PASTE YOUR SECRET
+  ```
+ 
+### Setting up kafka and zookeper
 We use Kafka as our data source, which is a distributed, partitioned, replicated commit log service. This
 section presents the steps you need to do to install Kafka on a Linux machine.
+
+If you already have kafka and zookeeper installed you can skip the first 6 steps, just create the topic lyricgen. If not follow the steps below:
 <details> 
   <summary>Kafka & Zookeeper Setup</summary>
  1. Download Kafka 2.0.0: https://archive.apache.org/dist/kafka/2.0.0/kafka 2.11-2.0.0.tgz
@@ -61,27 +69,6 @@ server if you do not already have one.
 
 
 ## Disclaimer
+This project is not done in association with Spotify and made for private use in a school project.
 
 
-## MVP/POC
-1. Explore the spotify API - how to make calls (ADD LINK)
-2. Explore the Kafka rest framework : How do we make API calls using kafka [LINK](https://www.instaclustr.com/making-api-requests-with-the-kafka-rest-proxy/)
-3. Connect the framework to Spotify - Make spotify calls - General and private calls (non user based or private that requires access)
-4. Output the timestamp from kafka
-5. Input to python script that has the lyric API
-6. call the lyric script and get the lyric given the timestamp 
-
-When done:
-1. Add database to store the lyrics and timestamps
-2. Make a UI that displays the stuff
-3. Try to make the cool translations on songs using gtranslate or similar
-
-    
-
-
-## Approach
-### Scraping
-Try to get the regular name and artist and make a call to rentadviser
-
-### UI
-https://codepen.io/rachsmith/pen/oGEMbz
