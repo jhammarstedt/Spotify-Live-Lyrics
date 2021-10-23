@@ -1,19 +1,26 @@
 <img src=https://www.freepnglogos.com/uploads/spotify-logo-png/spotify-download-logo-30.png align="right" width="100"> 
 
 # Spotioke 
-As Spotify only enables live lyrics in the U.S many of us Europeans missed out on a lot of fun kareoke sessions... Fear not, Spotioke is the Spotify Kareoke mashup you need! 
+As Spotify only enables live lyrics in the U.S many of us Europeans missed out on a lot of fun karaoke sessions...
+
+Fear not, Spotioke is the real-time Spotify Lyric Generator you need!
+
+Connect with your Spotify Account and enjoy real-time lyrics!
 
 ## Authors
 * Johan Hammarstedt  [<img src =https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png width ="20">](https://github.com/jhammarstedt) 
 * Javier García San Vicente  [<img src =https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png width ="20">](https://github.com/https://github.com/Javigsv) 
 
+## Video demo
+https://user-images.githubusercontent.com/52280124/138563736-45d96aed-c62b-4b53-b36e-5004d7093ee6.mp4
+
 ## Setup
 First fork this repository: `$git clone https://github.com/jhammarstedt/Spotify-lyric-Generator.git`
 
 ### Spotify Developer Account
-Since our app is still in developer mode, you'll need to have a premiun account and create your own app to run it, but fortunately this is very easy:
+Since our app is still in developer mode, you'll need to have a premium account and create your own app to run it, but fortunately, this is very easy:
 1. Go [here](https://developer.spotify.com/dashboard/)
-2. Login, accept the conditions to spotify developers
+2. Login, accept the conditions to Spotify developers
 3. Create an app
 4. Get your credentials (Client ID and Client Secret)
 5. In the project repo, create a .env file with the following and save:
@@ -24,9 +31,9 @@ Since our app is still in developer mode, you'll need to have a premiun account 
  
 ### Setting up kafka and zookeper
 We use Kafka as our data source, which is a distributed, partitioned, replicated commit log service. This
-section presents the steps you need to do to install Kafka on a Linux machine.
+the section presents the steps you need to do to install Kafka on a Linux machine.
 
-If you already have kafka and zookeeper installed you can skip the first 6 steps, just create the topic lyricgen. If not follow the steps below:
+If you already have Kafka and zookeeper installed you can skip the first 6 steps, just create the topic lyricgen. If not follow the steps below:
 <details> 
   <summary>Kafka & Zookeeper Setup</summary>
  1. Download Kafka 2.0.0: https://archive.apache.org/dist/kafka/2.0.0/kafka 2.11-2.0.0.tgz
@@ -64,11 +71,15 @@ server if you do not already have one.
 10. In another new window start the flask server, then open a browser and type "localhost" and the app should be displayed:
     `python3 server.py`
 
+## Control the occasional Offset
+Some songs do not have matching timestamps with the actually played song from Spotify. Therefore, while you run everything, open a new console and run the controls.py:
 
-## Video demo
+`python3 controls.py`
 
 
 ## Disclaimer
-This project is not done in association with Spotify and made for private use in a school project.
+This project is not done in association with Spotify and was made for private use in a school project. Note that not all lyrics will work, as our logic for getting the lyrics is not perfect, some songs are not found. Occasionally the timestamps are not matching with the lyrics due to the wrong version.
 
+## Credits
+* Lyrics from [Rentadviser](https://www.rentanadviser.com/subtitles/subtitles4songs.aspx)
 
