@@ -74,6 +74,10 @@ Some songs do not have matching timestamps with the actually played song from Sp
 
 `python3 controls.py`
 
+Then use the keyboard to control the offset:
+* `I` will increase the offset, making the lyrics come later
+* `D` will decrease the offset, making the lyrics come earlier 
+
 
 ## Disclaimer
 This project is not done in association with Spotify and was made for private use in a school project. Note that not all lyrics will work, as our logic for getting the lyrics is not perfect, some songs are not found. Occasionally the timestamps are not matching with the lyrics due to the wrong version.
