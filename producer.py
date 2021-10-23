@@ -3,7 +3,6 @@ from time import sleep
 import json
 from json import dumps
 from decouple import config
-
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 
@@ -12,33 +11,31 @@ from spotipy.oauth2 import SpotifyOAuth
 #       CONSTANTS              #
 ################################
 
-PERIOD = 0.3
+PERIOD = 0.3  # here we can set how often to make calls
 
 ################################
 #       AUTHENTIFICATION       #
 ################################
 
 scope = "user-read-playback-state user-read-playback-position"
-
-# THOSE CAN BE SET AS ENV VARIABLES IN LINUX
-CLIENT_ID = config('CLIENT_ID',default='')
-CLIENT_SECRET = config('CLIENT_SECRET',default='')
-REDIRECT_URI =  'http://localhost/callback'
-
-sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, redirect_uri=REDIRECT_URI, scope=scope))
+CLIENT_ID = config('CLIENT_ID', default='')
+CLIENT_SECRET = config('CLIENT_SECRET', default='')
+REDIRECT_URI = 'http://localhost/callback'
+sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=CLIENT_ID,
+                     client_secret=CLIENT_SECRET, redirect_uri=REDIRECT_URI, scope=scope))
 
 ################################
 #       PRODUCER INIT          #
 ################################
 
-producer = KafkaProducer(bootstrap_servers=['localhost:9092'], 
-    value_serializer=lambda x: dumps(x).encode('utf-8'))
+producer = KafkaProducer(bootstrap_servers=['localhost:9092'],
+                         value_serializer=lambda x: dumps(x).encode('utf-8'))
 
 ################################
 #       API REQUEST            #
 ################################
 
-for e in range(1000): #here we can set the time
+for e in range(10000):  # here we can set the time
 
     # REQUEST
     results = sp.current_playback()
