@@ -11,7 +11,7 @@ counter = 100
 ##############################
 @app.route("/")
 def render_index():
-  return render_template("spotify.html")
+  return render_template("neon.html")
 
 ##############################
 @app.route("/listen")
