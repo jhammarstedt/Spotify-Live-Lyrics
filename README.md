@@ -3,7 +3,7 @@
 # Spotify Lyric Generator 
 As Spotify only enables live lyrics in the U.S many of us Europeans missed out on a lot of fun karaoke sessions...
 
-Fear not, run our code, connect with your Spotify Account and enjoy real-time lyrics!
+Fear not! Fork our repo, connect with your Spotify Account and enjoy real-time lyrics!
 
 ## Authors
 * Johan Hammarstedt  [<img src =https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png width ="20">](https://github.com/jhammarstedt) 
