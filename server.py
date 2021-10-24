@@ -44,7 +44,7 @@ def listen():
 
 
 ##############################
-if __name__ == "__main__":
-    # app.run(port=80, debug=True)
+if __name__ == "__main__": #run the server
+    # app.run(port=80, debug=True) 
     http_server = WSGIServer(("localhost", 80), app)
     http_server.serve_forever()
