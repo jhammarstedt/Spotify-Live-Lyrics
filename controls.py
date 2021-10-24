@@ -1,8 +1,8 @@
-    """
-    The script we run to control the offset of the lyrics compared to the song
-    Key I: Increase offset -- lyrics will appear later
-    Key D: Decrease offset -- lyrics will appear earlier
-    """
+"""
+The script we run to control the offset of the lyrics compared to the song
+Key I: Increase offset -- lyrics will appear later
+Key D: Decrease offset -- lyrics will appear earlier
+"""
 import json
 
 while True:
