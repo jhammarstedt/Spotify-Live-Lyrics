@@ -63,14 +63,17 @@ server if you do not already have one.
 </details>
 
 7. Run the producer
+    
     `python3 producer.py`
 
 8. On the first run you need to give the app authentication to use your account, 
 
 9. In a new window start the consumer: 
-    `python3 consumer.py`
+   
+   `python3 consumer.py`
 
 10. In another new window start the flask server, then open a browser and type "localhost" and the app should be displayed:
+    
     `python3 server.py`
 
 ## Control the occasional Offset
