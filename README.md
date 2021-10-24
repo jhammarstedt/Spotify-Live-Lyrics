@@ -15,7 +15,7 @@ https://user-images.githubusercontent.com/52280124/138563736-45d96aed-c62b-4b53-
 ## Setup
 First fork this repository: `$git clone https://github.com/jhammarstedt/Spotify-lyric-Generator.git`
 
-Pip install the requirements
+Install the requirements
 
 `pip install -r requirements.txt`
 
