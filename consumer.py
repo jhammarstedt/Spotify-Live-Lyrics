@@ -36,7 +36,7 @@ consumer = KafkaConsumer(
     'lyricgen',
     value_deserializer=forgiving_json_deserializer,
     bootstrap_servers=['localhost:9092'],
-    auto_offset_reset='latest',  # Ska denna va latest?
+    auto_offset_reset='latest',   
     enable_auto_commit=False,  # Stämmer detta?
     group_id=None
 )
