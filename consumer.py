@@ -55,6 +55,7 @@ for message in consumer:
 
     if message['status'] == 'NOT PLAYING':
         print('No song being played')
+        write_to_file(reset=True)
         continue
 
     song = message['name']
