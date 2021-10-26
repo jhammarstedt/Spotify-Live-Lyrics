@@ -72,7 +72,7 @@ server if you do not already have one.
    
    `python3 consumer.py`
 
-10. In another new window start the flask server, then open a browser and type "localhost" and the app should be displayed:
+10. In another new window start the flask server, then open a browser and type "localhost" and the app should be displayed ("sudo" permits may be needed to init the server):
     
     `python3 server.py`
 
