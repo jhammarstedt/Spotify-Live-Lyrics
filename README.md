@@ -13,7 +13,7 @@ Fear not! Fork our repo, connect with your Spotify Account and enjoy real-time l
 https://user-images.githubusercontent.com/52280124/138563736-45d96aed-c62b-4b53-b36e-5004d7093ee6.mp4
 
 ## Setup
-First fork this repository: `$git clone https://github.com/jhammarstedt/Spotify-lyric-Generator.git`
+First fork this repository: `$git clone https://github.com/jhammarstedt/Spotify-Lyric-Generator.git`
 
 Install the requirements
 
