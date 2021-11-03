@@ -40,8 +40,9 @@ If you already have Kafka and zookeeper installed you can skip the first 6 steps
   <summary>Kafka & Zookeeper Setup</summary>
  1. Download Kafka 2.0.0: https://archive.apache.org/dist/kafka/2.0.0/kafka 2.11-2.0.0.tgz
 2. Set the following environment variables.
-    * `$export KAFKA_HOME="/path/to/the/kafka/folder"` 
-    * `$export PATH=$KAFKA_HOME/bin:$PATH`
+  
+     $export KAFKA_HOME="/path/to/the/kafka/folder"
+     $export PATH=$KAFKA_HOME/bin:$PATH
 
 3. Kafka uses ZooKeeper to maintain the configuration information, so you need to first start a ZooKeeper
 server if you do not already have one.
